@@ -6,6 +6,7 @@ A collection of routines that aid in reverting observables back to their origina
 Example Code: (also see the demo @ http://jsfiddle.net/dkrru/7/)
 
 <code>
+	<pre>
 var globalModel = function() {
     var self = this;
     self.all_results = ko.mapping.fromJS([]);
@@ -58,4 +59,5 @@ $(document).ready(function() {
     window.globalModel = new globalModel;
     ko.applyBindings(window.globalModel, $("body ").get(0));
 });
+	</pre>
 </code>
