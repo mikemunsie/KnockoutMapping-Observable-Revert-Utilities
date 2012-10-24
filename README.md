@@ -5,6 +5,8 @@ A collection of routines that aid in reverting observables back to their origina
 
 Example Code: (also see the demo @ http://jsfiddle.net/dkrru/7/)
 
+// Create a test Model
+
 var globalModel = function() {
     var self = this;
     self.all_results = ko.mapping.fromJS([]);
