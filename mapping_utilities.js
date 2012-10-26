@@ -37,23 +37,21 @@ var mappingUtils = function(){
     };
 
     // Remove by Key
-    self.removeByKey = function(obj, key, value) {
+    self.removeByKey = function(obj, _key, _value) {
         var index, key, keys, test, _i, _j, _len, _len1, _ref;
         _ref = obj();
         for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
             test = _ref[index];
             if (test) {
-                keys = Object.keys(obj.copy[index]);
-                for (_j = 0, _len1 = keys.length; _j < _len1; _j++) {
-                    key = keys[_j];
-                    if (key === key) {
-                        if (obj()[index][key]() === value) {
+                $.each(obj.copy[index], function(key, value) {
+                    if (key === _key) {
+                        if (obj()[index][key]() === _value) {
                             obj.splice(index, 1);
                             obj.copy.splice(index, 1);
-                            break;
+                            return;
                         }
                     }
-                }
+                });
             }
         }
     };
@@ -65,11 +63,9 @@ var mappingUtils = function(){
         for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
             test = _ref[index];
             if (test[key]() === value) {
-                keys = Object.keys(obj.copy[index]);
-                for (_j = 0, _len1 = keys.length; _j < _len1; _j++) {
-                    key = keys[_j];
+                $.each(obj.copy[index], function(key, value) {
                     obj()[index][key](obj.copy[index][key]);
-                }
+                });
                 return true;
             }
         }
@@ -81,11 +77,9 @@ var mappingUtils = function(){
         _ref = obj();
         for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
             test = _ref[index];
-            keys = Object.keys(obj.copy[index]);
-            for (_j = 0, _len1 = keys.length; _j < _len1; _j++) {
-                key = keys[_j];
+            $.each(obj.copy[index], function(key, value) {
                 obj()[index][key](obj.copy[index][key]);
-            }
+            });
         }
     };
 
