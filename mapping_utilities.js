@@ -3,6 +3,10 @@
  * Relies on KnockoutMapping Plugin
  * Author: Michael Munsie
  * Url: http://mikemunsie.com
+ *
+ * Notes:
+ * For objects and not arrays, you can use: restoreByKey and restoreUpdateAll
+ * Ex: restoreByKey(obj, "first_name")
  */
 
 var mappingUtils = function(){
@@ -15,7 +19,11 @@ var mappingUtils = function(){
             delete obj.copy;
             delete obj.original_copy;
         }
-        ko.mapping.fromJS(array, obj);
+        if(Array.isArray(obj)){
+            ko.mapping.fromJS(array, obj);
+        }else{
+            obj(ko.mapping.fromJS(array));
+        }
         obj.original_copy = [].concat(array); 
         obj.copy = [].concat(array);      
     };
@@ -58,27 +66,43 @@ var mappingUtils = function(){
 
     // Restore a particular Value (where id=1)
     self.restoreByKey = function(obj, key, value) {
-        var index, key, keys, test, _i, _j, _len, _len1, _ref;
-        _ref = obj();
-        for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-            test = _ref[index];
-            if (test[key]() === value) {
-                $.each(obj.copy[index], function(key, value) {
-                    obj()[index][key](obj.copy[index][key]);
-                });
-                return true;
+        if(Array.isArray(obj)){
+            var index, key, keys, test, _i, _j, _len, _len1, _ref;
+            _ref = obj();
+            for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+                test = _ref[index];
+                if (test[key]() === value) {
+                    $.each(obj.copy[index], function(key, value) {
+                        obj()[index][key](obj.copy[index][key]);
+                    });
+                    return true;
+                }
             }
+        }else{
+            $.each(obj.copy[0], function(_key, value) {
+                if(_key == key){
+                    obj()[key](obj.copy[0][key]);
+                }
+                return;
+            });
+            return true;
         }
     };
 
-    // Restore all objects back to the copy
+   // Restore all objects back to the copy
     self.restoreUpdateAll = function(obj) {
-        var index, key, keys, test, _i, _j, _len, _len1, _ref;
-        _ref = obj();
-        for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-            test = _ref[index];
-            $.each(obj.copy[index], function(key, value) {
-                obj()[index][key](obj.copy[index][key]);
+        if(Array.isArray(obj)){
+            var index, key, keys, test, _i, _j, _len, _len1, _ref;
+            _ref = obj();
+            for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+                test = _ref[index];
+                $.each(obj.copy[index], function(key, value) {
+                    obj()[index][key](obj.copy[index][key]);
+                });
+            }
+        }else{
+            $.each(obj.copy[0], function(key, value) {
+                obj()[key](value);
             });
         }
     };
