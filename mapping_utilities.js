@@ -19,7 +19,7 @@ var mappingUtils = function(){
             delete obj.copy;
             delete obj.original_copy;
         }
-        if(Array.isArray(obj)){
+        if(Array.isArray(array)){
             ko.mapping.fromJS(array, obj);
         }else{
             obj(ko.mapping.fromJS(array));
